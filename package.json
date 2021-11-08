@@ -1,0 +1,19 @@
+{
+  "name": "load-balancer",
+  "version": "1.0.0",
+  "description": "Load Balancer is a mechanism which is used to distribute incoming traffic among the servers.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "ejs": "^3.1.6",
+    "express": "^4.17.1",
+    "express-http-proxy": "^1.6.3",
+    "nodemon": "^2.0.14"
+  }
+}

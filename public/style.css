@@ -1,0 +1,110 @@
+* {
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  width: 80%;
+  margin: auto;
+}
+
+h1 {
+  text-align: center;
+  padding-top: 20px;
+}
+
+p {
+  padding-top: 10px;
+}
+
+span {
+  color: grey;
+  font-size: large;
+}
+
+.networkStructure {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.networkStructure div {
+  flex: auto;
+}
+
+.senderSide {
+  max-width: fit-content;
+  display: flex;
+  flex-direction: column;
+}
+
+button {
+  padding: 5px;
+  cursor: pointer;
+  background-color: darkgreen;
+  color: white;
+}
+
+.senderButton{ 
+   background:#ECEFF1;
+   box-shadow: 5px 5px rgba(0,0,0,0.2);
+   border-radius: 10px;
+   color: black;
+}
+
+.red {
+  background-color: red;
+  color: white;
+}
+
+.loadBalancer {
+  max-width: 100px;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  border: 1px dashed black;
+  background:#f57192cb;
+  box-shadow: 5px 5px rgba(0,0,0,0.2);
+}
+
+.server {
+  border: 1px black solid;
+  margin: 2px;
+  max-width: 50px;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background:#4dcedfcb;
+  box-shadow: 5px 5px rgba(0,0,0,0.2);
+}
+
+.arrow-block {
+  max-width: 100px;
+  display: flex;
+  align-items: center;
+  margin: 30px auto;
+}
+
+.arrow {
+  display: inline-block;
+  height: 1px;
+  border-bottom: 1px solid red;
+  min-width: 100px;
+}
+
+.arrow-pointer {
+  border: solid black;
+  border-width: 0 3px 3px 0;
+  display: inline-block;
+  padding: 3px;
+  transform: rotate(-45deg);
+}
+
+.serving {
+  background-color: chartreuse;
+}
