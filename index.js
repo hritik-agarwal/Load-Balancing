@@ -44,7 +44,7 @@ function loadBalancerRoundRobin() {
     }
     const port = PORT + 1 + currServer;
     if (servers[currServer].active) {
-      const server = `http://localhost:${port}`;
+      const server = `http://load-balancer-123.herokuapp.com:${port}`;
       currServer = (currServer + 1) % NUMBER_OF_SERVERS;
       return server;
     }
