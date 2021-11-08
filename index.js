@@ -62,7 +62,7 @@ app.post('/', (req, res) => {
   currServer--;
   res.redirect('/');
 })
-app.listen(PORT, () => console.log(`server is running on port %{PORT}`));
+app.listen(PORT, () => console.log(`server is running on port ${PORT}`));
 
 // creating all the instances of different servers
 for (let i = PORT+1; i <= PORT + 1 + NUMBER_OF_SERVERS - 1; i++) createServers(i);
