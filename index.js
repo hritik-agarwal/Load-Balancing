@@ -4,7 +4,7 @@ const path = require('path');
 const ejs = require('ejs'); 
 
 const NUMBER_OF_SERVERS = 5;
-const PORT = 3000 || process.env.PORT;
+const PORT = process.env.PORT || 3000;
 
 class Server{
   constructor(active, port) {
