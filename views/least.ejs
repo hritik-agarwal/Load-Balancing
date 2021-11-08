@@ -1,10 +1,8 @@
-<%- include('header.ejs') %>
-<h1>Least Connections Algorithm</h1>
+<%- include('header.ejs') %> 
+<h1>Least Connections Algorithm</h1> <br> <br>
 <ul>
   <li>Least Connection load balancing is a dynamic load balancing algorithm.</li>
   <li>Here client requests are distributed to the application server with the least number of active connections.</li>
-  <li>Least Connections server load balancing works best when servers have roughly identical computing capabilities and
-    storage capacity.</li>
   <li>In cases where application servers have similar specifications, an application server may be overloaded due to longer lived connections.</li>
   <li>Algorithm takes the active connection load into consideration </li>
 </ul>
@@ -15,7 +13,7 @@
 <strong style="color: green;">Click <i>Sender</i> to send request. Click <i>status</i> to toggle working/not-working
   state of server.</strong>
 <div class="leastConnection">
-  <h3>Demonstration of the Least Connection Load Balancing Algorithms</h3>
+  <h3>Demonstration of the Least Connection Load Balancing Algorithms ( Assumption: Max load on any server is 3 )</h3>
   <div class="networkStructure">
     <div class="senderSide">
       <button class="senderButton" onclick="window.location.href=window.location.href">Sender1</button>
