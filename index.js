@@ -16,18 +16,18 @@ class Server{
 let servers = [];
 
 function createServers(port) {
-  let app = express();
-  app.set("view engine", "ejs");
-  app.get('/', (req, res) => {
-    res.render('index.ejs', {
-      serverNumber: port - PORT,
-      serversState: servers.map(s => {
-        if (s.active) return "green";
-        else return "red";
-      })
-    });
-  });
-  app.listen(port);
+  // let app = express();
+  // app.set("view engine", "ejs");
+  // app.get('/', (req, res) => {
+  //   res.render('index.ejs', {
+  //     serverNumber: port - PORT,
+  //     serversState: servers.map(s => {
+  //       if (s.active) return "green";
+  //       else return "red";
+  //     })
+  //   });
+  // });
+  // app.listen(port);
   let newServer = new Server(true, port);
   servers.push(newServer);
 }
@@ -44,9 +44,9 @@ function loadBalancerRoundRobin() {
     }
     const port = PORT + 1 + currServer;
     if (servers[currServer].active) {
-      const server = `http://load-balancer-123.herokuapp.com:${port}`;
+      // const server = `http://localhost:${port}`;
       currServer = (currServer + 1) % NUMBER_OF_SERVERS;
-      return server;
+      return port;
     }
     currServer = (currServer + 1) % NUMBER_OF_SERVERS;
     passes++;
@@ -55,7 +55,17 @@ function loadBalancerRoundRobin() {
 
 // Main server where the request will be routed through different servers using load balancer algorithm
 const app = require('./app');
-app.get("/", proxy(loadBalancerRoundRobin));
+// app.get("/", proxy(loadBalancerRoundRobin));
+app.get("/", (req, res) => {
+  const port = loadBalancerRoundRobin();
+  res.render("index.ejs", {
+    serverNumber: port - PORT,
+    serversState: servers.map((s) => {
+      if (s.active) return "green";
+      else return "red";
+    }),
+  });
+})
 app.post('/', (req, res) => {
   let server = req.body.server-1;
   servers[server].active = !servers[server].active;
