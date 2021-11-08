@@ -1,19 +1,23 @@
 const express = require("express");
 const proxy = require("express-http-proxy");
-const path = require('path');
-const ejs = require('ejs'); 
+const path = require("path");
+const ejs = require("ejs");
 
 const NUMBER_OF_SERVERS = 5;
 const PORT = process.env.PORT || 3000;
 
-class Server{
+class Server {
   constructor(active, port) {
     this.active = active;
     this.port = port;
+    this.connections = 0;
   }
 }
 
-let servers = [];
+let serversRoundRobin = [];
+let serversLeastConnections = [];
+let currServerRoundRobin = 0;
+let currServerLeastConnections = 0;
 
 function createServers(port) {
   // let app = express();
@@ -29,49 +33,108 @@ function createServers(port) {
   // });
   // app.listen(port);
   let newServer = new Server(true, port);
-  servers.push(newServer);
+  serversRoundRobin.push(newServer);
+  serversLeastConnections.push(JSON.parse(JSON.stringify(newServer)));
 }
-
-let currServer = 0;
 
 // Load Balancer: Round Robin Algorithm
 function loadBalancerRoundRobin() {
   let passes = 0;
   while (true) {
-    if (passes == NUMBER_OF_SERVERS || currServer<0 || currServer>=NUMBER_OF_SERVERS) {
-      currServer = 0;
-      for (let i = 0; i < NUMBER_OF_SERVERS; i++) servers[i].active = true;
+    if (
+      passes == NUMBER_OF_SERVERS ||
+      currServerRoundRobin < 0 ||
+      currServerRoundRobin >= NUMBER_OF_SERVERS
+    ) {
+      currServerRoundRobin = 0;
+      for (let i = 0; i < NUMBER_OF_SERVERS; i++)
+        serversRoundRobin[i].active = true;
     }
-    const port = 1 + currServer;
-    if (servers[currServer].active) {
+    const port = 1 + currServerRoundRobin;
+    if (serversRoundRobin[currServerRoundRobin].active) {
       // const server = `http://localhost:${port}`;
-      currServer = (currServer + 1) % NUMBER_OF_SERVERS;
+      currServerRoundRobin = (currServerRoundRobin + 1) % NUMBER_OF_SERVERS;
       return port;
     }
-    currServer = (currServer + 1) % NUMBER_OF_SERVERS;
+    currServerRoundRobin = (currServerRoundRobin + 1) % NUMBER_OF_SERVERS;
     passes++;
   }
 }
 
+function loadBalancerLeastConnection() {
+  let serverNum = -1;
+  let minConnections = 3;
+  for (let i = 0; i < NUMBER_OF_SERVERS; i++){
+    if (serversLeastConnections[i].connections < minConnections && serversLeastConnections[i].active == true) {
+      minConnections = serversLeastConnections[i].connections;
+      serverNum = i;
+    }
+  }
+  if (serverNum == -1) {
+    for (let i = 0; i < NUMBER_OF_SERVERS; i++)
+      serversLeastConnections[i].active = true, serversLeastConnections[i].connections = 0;
+    serverNum = 0;
+  }
+  serversLeastConnections[serverNum].connections++;
+  currServerLeastConnections = serverNum;
+  return serverNum+1;
+}
+
 // Main server where the request will be routed through different servers using load balancer algorithm
-const app = require('./app');
+const app = require("./app");
+
 // app.get("/", proxy(loadBalancerRoundRobin));
 app.get("/", (req, res) => {
+  res.render("index.ejs");
+});
+
+app.get("/round", (req, res) => {
   const port = loadBalancerRoundRobin();
-  res.render("index.ejs", {
+  res.render("round.ejs", {
     serverNumber: port,
-    serversState: servers.map((s) => {
+    serversState: serversRoundRobin.map((s) => {
       if (s.active) return "green";
       else return "red";
     }),
   });
-})
-app.post('/', (req, res) => {
-  let server = req.body.server-1;
-  servers[server].active = !servers[server].active;
-  currServer--;
-  res.redirect('/');
-})
+});
+
+app.get("/least", (req, res) => {
+  const port = loadBalancerLeastConnection();
+  res.render("least.ejs", {
+    serverNumber: port,
+    serversState: serversLeastConnections.map((s) => {
+      if (s.active) return "green";
+      else return "red";
+    }),
+    serverConnections: serversLeastConnections.map((s) => s.connections)
+  });
+});
+
+app.post("/round", (req, res) => {
+  let server = req.body.roundRobinServer - 1;
+  serversRoundRobin[server].active = !serversRoundRobin[server].active;
+  currServerRoundRobin--; if (currServerRoundRobin < 0) currServerRoundRobin = NUMBER_OF_SERVERS - 1;
+  res.redirect("/round");
+});
+
+app.post("/least", (req, res) => {
+  let server = req.body.leastConnectionserver - 1;
+  serversLeastConnections[server].active = !serversLeastConnections[server].active;
+  serversLeastConnections[server].connections = 0;
+  if (server != currServerLeastConnections) {
+    res.render("least.ejs", {
+      serverNumber: currServerLeastConnections+1,
+      serversState: serversLeastConnections.map((s) => {
+        if (s.active) return "green";
+        else return "red";
+      }),
+      serverConnections: serversLeastConnections.map((s) => s.connections),
+    });
+  }
+  else res.redirect("/least");
+});
+
 app.listen(PORT, () => console.log(`server is running on port ${PORT}`));
 
 // creating all the instances of different servers

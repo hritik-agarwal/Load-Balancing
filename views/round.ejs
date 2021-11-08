@@ -1,0 +1,97 @@
+<%- include('header.ejs') %>
+<h1>Round Robin Algorithm</h1> <br><br>
+<ul>
+  <li>Round robin is the most widely deployed load balancing algorithm.</li>
+  <li>Using this method, client requests are routed to available servers on a cyclical basis.</li>
+  <li>Round robin server load balancing works best when servers have roughly identical computing capabilities and storage capacity.</li>
+  <li>If certain servers have more CPU, RAM, or other specifications, the algorithm has no way to distribute more requests to these servers.</li>
+  <li>Servers with less capacity may overload and fail more quickly while capacity on other servers lie idle.</li>
+</ul>
+<br> <br>
+<a href="/" style="padding: 5px;">Go to Homepage</a><br><br><br>
+<strong style="color: blue;">On the backend there are 5 servers from 1 to 5. Each working independently and
+  concurrently.</strong> <br>
+<strong style="color: green;">Click <i>Sender</i> to send request. Click <i>status</i> to toggle working/not-working
+  state of server.</strong>
+<div class="roundRobin">
+  <h3>Demonstration of the Round Robin Load Balancing Algorithms</h3>
+  <div class="networkStructure">
+    <div class="senderSide">
+      <button class="senderButton" onclick="window.location.href=window.location.href">Sender1</button>
+      <button class="senderButton" onclick="window.location.href=window.location.href">Sender2</button>
+      <button class="senderButton" onclick="window.location.href=window.location.href">Sender3</button>
+      <button class="senderButton" onclick="window.location.href=window.location.href">Sender4</button>
+    </div>
+    <div class="arrows">
+      <div class="arrow-block">
+        <div class="arrow"></div>
+        <div class="arrow-pointer"></div>
+      </div>
+    </div>
+    <div class="loadBalancer">Load Balancer</div>
+    <div class="arrows">
+      <div class="arrow-block">
+        <div class="arrow"></div>
+        <div class="arrow-pointer"></div>
+      </div>
+      <div class="arrow-block">
+        <div class="arrow"></div>
+        <div class="arrow-pointer"></div>
+      </div>
+      <div class="arrow-block">
+        <div class="arrow"></div>
+        <div class="arrow-pointer"></div>
+      </div>
+      <div class="arrow-block">
+        <div class="arrow"></div>
+        <div class="arrow-pointer"></div>
+      </div>
+      <div class="arrow-block">
+        <div class="arrow"></div>
+        <div class="arrow-pointer"></div>
+      </div>
+    </div>
+    <div class="servers">
+      <div style="display: flex; align-items: center;">
+        <div class="server serving">1</div>
+        <form action="/round" method="post"><button class="<%= serversState[0] %>" name="roundRobinServer" value="1">State</button>
+        </form>
+      </div>
+      <div style="display: flex; align-items: center;">
+        <div class="server">2</div>
+        <form action="/round" method="post"><button class="<%= serversState[1] %>" name="roundRobinServer" value="2">State</button>
+        </form>
+      </div>
+      <div style="display: flex; align-items: center;">
+        <div class="server">3</div>
+        <form action="/round" method="post"><button class="<%= serversState[2] %>" name="roundRobinServer" value="3">State</button>
+        </form>
+      </div>
+      <div style="display: flex; align-items: center;">
+        <div class="server">4</div>
+        <form action="/round" method="post"><button class="<%= serversState[3] %>" name="roundRobinServer" value="4">State</button>
+        </form>
+      </div>
+      <div style="display: flex; align-items: center;">
+        <div class="server">5</div>
+        <form action="/round" method="post"><button class="<%= serversState[4] %>" name="roundRobinServer" value="5">State</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  <h3 style="text-align: center;">Current page is sent by server number: <span id="serverNumber" style="color:darkred;">
+      <%= serverNumber %>
+    </span></span></h3>
+  <br><br><br>
+</div>
+
+<script>
+  var x = document.getElementById("serverNumber").innerHTML;
+  var y = document.getElementsByClassName("server");
+  for (let i = 0; i < y.length; i++) {
+    if (i + 1 == x) y[i].classList = "server serving";
+    else y[i].classList = "server";
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,102 @@
+<%- include('header.ejs') %>
+<h1>Least Connections Algorithm</h1>
+<ul>
+  <li>Least Connection load balancing is a dynamic load balancing algorithm.</li>
+  <li>Here client requests are distributed to the application server with the least number of active connections.</li>
+  <li>Least Connections server load balancing works best when servers have roughly identical computing capabilities and
+    storage capacity.</li>
+  <li>In cases where application servers have similar specifications, an application server may be overloaded due to longer lived connections.</li>
+  <li>Algorithm takes the active connection load into consideration </li>
+</ul>
+<br><br>
+<a href="/" style="padding: 5px;">Go to Homepage</a><br><br><br>
+<strong style="color: blue;">On the backend there are 5 servers from 1 to 5. Each working independently and
+  concurrently.</strong> <br>
+<strong style="color: green;">Click <i>Sender</i> to send request. Click <i>status</i> to toggle working/not-working
+  state of server.</strong>
+<div class="leastConnection">
+  <h3>Demonstration of the Least Connection Load Balancing Algorithms</h3>
+  <div class="networkStructure">
+    <div class="senderSide">
+      <button class="senderButton" onclick="window.location.href=window.location.href">Sender1</button>
+      <button class="senderButton" onclick="window.location.href=window.location.href">Sender2</button>
+      <button class="senderButton" onclick="window.location.href=window.location.href">Sender3</button>
+      <button class="senderButton" onclick="window.location.href=window.location.href">Sender4</button>
+    </div>
+    <div class="arrows">
+      <div class="arrow-block">
+        <div class="arrow"></div>
+        <div class="arrow-pointer"></div>
+      </div>
+    </div>
+    <div class="loadBalancer">Load Balancer</div>
+    <div class="arrows">
+      <div class="arrow-block">
+        <div class="arrow"></div>
+        <div class="arrow-pointer"></div>
+      </div>
+      <div class="arrow-block">
+        <div class="arrow"></div>
+        <div class="arrow-pointer"></div>
+      </div>
+      <div class="arrow-block">
+        <div class="arrow"></div>
+        <div class="arrow-pointer"></div>
+      </div>
+      <div class="arrow-block">
+        <div class="arrow"></div>
+        <div class="arrow-pointer"></div>
+      </div>
+      <div class="arrow-block">
+        <div class="arrow"></div>
+        <div class="arrow-pointer"></div>
+      </div>
+    </div>
+    <div class="servers">
+      <div style="display: flex; align-items: center;">
+        <div class="server serving">1</div>
+        <form action="/least" method="post"><button class="<%= serversState[0] %>" name="leastConnectionserver" value="1">State</button>
+        <span>( <%= serverConnections[0] %> )</span>
+        </form>
+      </div>
+      <div style="display: flex; align-items: center;">
+        <div class="server">2</div>
+        <form action="/least" method="post"><button class="<%= serversState[1] %>" name="leastConnectionserver" value="2">State</button>
+          <span>( <%= serverConnections[1] %> )</span>
+        </form>
+      </div>
+      <div style="display: flex; align-items: center;">
+        <div class="server">3</div>
+        <form action="/least" method="post"><button class="<%= serversState[2] %>" name="leastConnectionserver" value="3">State</button>
+          <span>( <%= serverConnections[2] %> )</span>
+        </form>
+      </div>
+      <div style="display: flex; align-items: center;">
+        <div class="server">4</div>
+        <form action="/least" method="post"><button class="<%= serversState[3] %>" name="leastConnectionserver" value="4">State</button>
+          <span>( <%= serverConnections[3] %> )</span>
+        </form>
+      </div>
+      <div style="display: flex; align-items: center;">
+        <div class="server">5</div>
+        <form action="/least" method="post"><button class="<%= serversState[4] %>" name="leastConnectionserver" value="5">State</button>
+          <span>( <%= serverConnections[4] %> )</span>
+        </form>
+      </div>
+    </div>
+  </div>
+  <h3 style="text-align: center;">Current page is sent by server number: <span id="serverNumber" style="color:darkred;">
+      <%= serverNumber %>
+    </span></span></h3>
+  <br><br><br>
+</div>
+<script>
+  var xx = document.getElementById("serverNumber").innerHTML;
+  var yy = document.getElementsByClassName("server");
+  for (let i = 0; i < yy.length; i++) {
+    if (i + 1 == xx) yy[i].classList = "server serving";
+    else yy[i].classList = "server";
+  }
+</script>
+</body>
+</html>
