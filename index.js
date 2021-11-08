@@ -42,7 +42,7 @@ function loadBalancerRoundRobin() {
       currServer = 0;
       for (let i = 0; i < NUMBER_OF_SERVERS; i++) servers[i].active = true;
     }
-    const port = PORT + 1 + currServer;
+    const port = 1 + currServer;
     if (servers[currServer].active) {
       // const server = `http://localhost:${port}`;
       currServer = (currServer + 1) % NUMBER_OF_SERVERS;
@@ -59,7 +59,7 @@ const app = require('./app');
 app.get("/", (req, res) => {
   const port = loadBalancerRoundRobin();
   res.render("index.ejs", {
-    serverNumber: port - PORT,
+    serverNumber: port,
     serversState: servers.map((s) => {
       if (s.active) return "green";
       else return "red";
@@ -75,4 +75,4 @@ app.post('/', (req, res) => {
 app.listen(PORT, () => console.log(`server is running on port ${PORT}`));
 
 // creating all the instances of different servers
-for (let i = PORT+1; i <= PORT + 1 + NUMBER_OF_SERVERS - 1; i++) createServers(i);
+for (let i = 1; i <= NUMBER_OF_SERVERS; i++) createServers(i);
