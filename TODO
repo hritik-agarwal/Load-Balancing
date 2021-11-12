@@ -1,7 +1,0 @@
--- load balancer
-1. root http server
-2. load balancer algorithm ( round robin )
-3. routing to different servers
-4. additional features
-  a. health check code for servers if they are alive or not
-  b. 

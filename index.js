@@ -86,6 +86,13 @@ const app = require("./app");
 // app.get("/", proxy(loadBalancerRoundRobin));
 app.get("/", (req, res) => {
   res.render("index.ejs");
+  for (let i = 0; i < NUMBER_OF_SERVERS; i++) {
+    serversLeastConnections[i].active = true;
+    serversLeastConnections[i].connections = 0;
+  }
+  for (let i = 0; i < NUMBER_OF_SERVERS; i++){
+    serversRoundRobin[i].active = true;
+  }
 });
 
 app.get("/round", (req, res) => {
