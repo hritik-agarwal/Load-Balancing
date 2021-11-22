@@ -21,3 +21,6 @@ Load Balancers uses a particular algorithm to choose a server among all to send 
 ## How it is implemented in the code?
 
 The load balancer is a process that takes in the HTTP requests and forwards these HTTP requests to one of the server among collection of servers available.
+
+## View Live Demo
+https://load-balancer-123.herokuapp.com/
